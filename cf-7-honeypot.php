@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin Name: Simple Contact Form 7 Honeypot
- * Description: Adds a hidden field with a random name to Contact Form 7 forms to block bot submissions.
+ * Description: Adds a hidden field with a random name to Contact Form 7 forms to block bot/spam submissions.
  * Version: 1.0.0
  * Author: Roland Farkas
  * Author URI: https://rolandfarkas.com
- * License: GPL2
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: cf7-honeypot
+ * License: GPL3
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain: cf-7-honeypot
  * Requires at least: 4.9
- * Tested up to: 6.3
+ * Tested up to: 6.5.3
  */
 
 // Exit if accessed directly
@@ -41,7 +41,7 @@ function check_random_honeypot_field($result, $tags) {
     // Check the honeypot field value
     if ($field_name && isset($_POST[$field_name]) && !empty($_POST[$field_name])) {
 		error_log($_POST[$field_name]);
-        $result->invalidate('', __('Spam detected.', 'cf7-honeypot'));
+        $result->invalidate('', __('Spam detected.', 'cf-7-honeypot'));
     }
 
     return $result;
