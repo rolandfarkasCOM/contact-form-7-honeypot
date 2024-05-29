@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name: Simple Contact Form 7 Honeypot
+ * Plugin URI: https://plugins.mcms.io/cf-7-honeypot
  * Description: Adds a hidden field with a random name to Contact Form 7 forms to block bot/spam submissions.
  * Version: 1.0.1
  * Author: Roland Farkas
