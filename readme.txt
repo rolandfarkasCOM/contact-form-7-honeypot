@@ -38,3 +38,5 @@ Simply deactivate and delete the plugin.
 * Tweaks
 = 1.0.2 =
 * Added an additional time tracker feature
+= 1.0.3 =
+* Tweaks
