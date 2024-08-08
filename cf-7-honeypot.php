@@ -1,16 +1,16 @@
 <?php
 /**
- * Plugin Name: Simple Contact Form 7 Honeypot
- * Plugin URI: https://plugins.mcms.io/cf-7-honeypot
+ * Plugin Name: Simple Honeypot for Contact Form 7
+ * Plugin URI: https://plugins.mcms.io/honeypot-for-cf7
  * Description: Adds a hidden field with a random name to Contact Form 7 forms to block bot/spam submissions.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Roland Farkas
  * Author URI: https://rolandfarkas.com
  * License: GPL3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: cf-7-honeypot
+ * Text Domain: honeypot-for-cf7
  * Requires at least: 4.9
- * Tested up to: 6.5
+ * Tested up to: 6.6
  */
 
 // Exit if accessed directly
@@ -45,12 +45,12 @@ function check_random_honeypot_field($result, $tags) {
 
     // Verify nonce
     if (!isset($_POST['cf7_honeypot_nonce']) || !wp_verify_nonce($_POST['cf7_honeypot_nonce'], 'cf7_honeypot_nonce')) {
-        $result->invalidate('', __('Nonce verification failed.', 'cf-7-honeypot'));
+        $result->invalidate('', __('Nonce verification failed.', 'honeypot-for-cf7'));
     }
 
     // Check the honeypot field value
     if ($field_name && isset($_POST[$field_name]) && !empty($_POST[$field_name])) {
-        $result->invalidate('', __('Spam detected.', 'cf-7-honeypot'));
+        $result->invalidate('', __('Spam detected.', 'honeypot-for-cf7'));
     }
 
     return $result;
