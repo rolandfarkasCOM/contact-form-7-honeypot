@@ -1,12 +1,12 @@
 === Simple Honeypot for Contact Form 7 ===
 Contributors: rolandfarkas
 Tags: contact form 7, honepot, bot, spam protection, spam
-Requires at least: 4.9
+Requires at least: 5.6
 Tested up to: 6.6
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
-Requires PHP: 5.6
+Requires PHP: 7.0
  
 A WordPress plugin to block spam bots on every Contact Form 7 form.
  
@@ -42,3 +42,5 @@ Simply deactivate and delete the plugin.
 * Tweaks
 = 1.0.4 =
 * Security fixes and tweaks
+= 1.0.5 =
+* Tweaks

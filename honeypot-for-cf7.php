@@ -3,10 +3,10 @@
  * Plugin Name: Simple Honeypot for Contact Form 7
  * Plugin URI: https://github.com/rolandfarkasCOM/honeypot-for-cf7/
  * Description: A simple honeypot/spam blocker plugin for Contact Form 7.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Roland Farkas
  * Author URI: https://rolandfarkas.com
- * License: GPL3
+ * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: honeypot-for-cf7
  * Requires at least: 5.6
@@ -17,57 +17,61 @@
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 // Hook into the 'wpcf7_form_hidden_fields' filter to add the hidden honeypot field, nonce field, and timestamp
 add_filter('wpcf7_form_hidden_fields', 'shfcf7_add_random_honeypot_hidden_field_and_timestamp');
 
 function shfcf7_add_random_honeypot_hidden_field_and_timestamp($hidden_fields) {
-    // Generate a random field name
-    $field_name = 'honeypot_' . wp_generate_password(8, false, false);
+	// Generate a random field name
+	$field_name = 'honeypot_' . str_replace('-', '_', wp_generate_uuid4());
 
-    // Add the random field name to the hidden fields array
-    $hidden_fields['honeypot_field_name'] = $field_name;
-    $hidden_fields[$field_name] = '';
+	// Add the random field name to the hidden fields array
+	$hidden_fields['honeypot_field_name'] = $field_name;
+	$hidden_fields[$field_name] = '';
 
-    // Generate a nonce and add it to the hidden fields array
-    $nonce = wp_create_nonce('cf7_honeypot_nonce');
-    $hidden_fields['cf7_honeypot_nonce'] = $nonce;
+	// Generate a nonce and add it to the hidden fields array
+	$nonce = wp_create_nonce('cf7_honeypot_nonce');
+	$hidden_fields['cf7_honeypot_nonce'] = $nonce;
 
-    // Add a timestamp to the hidden fields array
-    $hidden_fields['cf7_honeypot_timestamp'] = time();
+	// Add a timestamp to the hidden fields array
+	$hidden_fields['cf7_honeypot_timestamp'] = time();
 
-    return $hidden_fields;
+	return $hidden_fields;
 }
 
 // Hook into the 'wpcf7_validate' filter to check the honeypot field, nonce, and submission time
 add_filter('wpcf7_validate', 'shfcf7_check_random_honeypot_field_and_time', 10, 2);
 
 function shfcf7_check_random_honeypot_field_and_time($result, $tags) {
-    // Retrieve and sanitize the field name from the hidden input
-    $field_name = sanitize_text_field(wp_unslash($_POST['honeypot_field_name']));
+	// Retrieve and sanitize the field name from the hidden input
+	if (isset($_POST['honeypot_field_name'])) {
+		$field_name = sanitize_text_field(wp_unslash($_POST['honeypot_field_name']));
+	} else {
+		$field_name = '';
+	}
 
-    // Verify nonce after sanitizing the input
-    if (!isset($_POST['cf7_honeypot_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['cf7_honeypot_nonce'])), 'cf7_honeypot_nonce')) {
-        $result->invalidate('', __('Nonce verification failed.', 'honeypot-for-cf7'));
-    }
+	// Verify nonce after sanitizing the input
+	if (!isset($_POST['cf7_honeypot_nonce']) || !wp_verify_nonce(sanitize_key(wp_unslash($_POST['cf7_honeypot_nonce'])), 'cf7_honeypot_nonce')) {
+		$result->invalidate('', __('There was an issue with your submission, please try again.', 'honeypot-for-cf7') . ' ' . __('Nonce verification failed.', 'honeypot-for-cf7'));
+	}
 
-    // Check the honeypot field value
-    if ($field_name && isset($_POST[$field_name]) && !empty($_POST[$field_name])) {
-        $result->invalidate('', __('Spam detected.', 'honeypot-for-cf7'));
-    }
+	// Check the honeypot field value
+	if ($field_name && isset($_POST[$field_name]) && !empty($_POST[$field_name])) {
+		$result->invalidate('', __('Spam detected.', 'honeypot-for-cf7'));
+	}
 
-    // Check the time taken to submit the form
-    if (isset($_POST['cf7_honeypot_timestamp'])) {
-        $submission_time = time() - intval(sanitize_text_field(wp_unslash($_POST['cf7_honeypot_timestamp'])));
-        // Set a minimum time in seconds (e.g., 4 seconds)
-        $min_time = 4;
+	// Check the time taken to submit the form
+	if (isset($_POST['cf7_honeypot_timestamp'])) {
+		$submission_time = time() - absint(sanitize_text_field(wp_unslash($_POST['cf7_honeypot_timestamp'])));
+		// Set a minimum time in seconds (e.g., 4 seconds)
+		$min_time = 4;
 
-        if ($submission_time < $min_time) {
-            $result->invalidate('', __('Form submitted too quickly. Please wait a few seconds before submitting again.', 'honeypot-for-cf7'));
-        }
-    }
+		if ($submission_time < 0 || $submission_time < $min_time) {
+			$result->invalidate('', __('Form submitted too quickly. Please wait a few seconds before submitting again.', 'honeypot-for-cf7'));
+		}
+	}
 
-    return $result;
+	return $result;
 }
