@@ -3,7 +3,7 @@
  * Plugin Name: Simple Honeypot for Contact Form 7
  * Plugin URI: https://github.com/rolandfarkasCOM/honeypot-for-cf7/
  * Description: A simple honeypot/spam blocker plugin for Contact Form 7.
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Roland Farkas
  * Author URI: https://rolandfarkas.com
  * License: GPLv3 or later
@@ -31,10 +31,6 @@ function shfcf7_add_random_honeypot_hidden_field_and_timestamp($hidden_fields) {
 	$hidden_fields['honeypot_field_name'] = $field_name;
 	$hidden_fields[$field_name] = '';
 
-	// Generate a nonce and add it to the hidden fields array
-	$nonce = wp_create_nonce('cf7_honeypot_nonce');
-	$hidden_fields['cf7_honeypot_nonce'] = $nonce;
-
 	// Add a timestamp to the hidden fields array
 	$hidden_fields['cf7_honeypot_timestamp'] = time();
 
@@ -50,11 +46,6 @@ function shfcf7_check_random_honeypot_field_and_time($result, $tags) {
 		$field_name = sanitize_text_field(wp_unslash($_POST['honeypot_field_name']));
 	} else {
 		$field_name = '';
-	}
-
-	// Verify nonce after sanitizing the input
-	if (!isset($_POST['cf7_honeypot_nonce']) || !wp_verify_nonce(sanitize_key(wp_unslash($_POST['cf7_honeypot_nonce'])), 'cf7_honeypot_nonce')) {
-		$result->invalidate('', __('There was an issue with your submission, please try again.', 'honeypot-for-cf7') . ' ' . __('Nonce verification failed.', 'honeypot-for-cf7'));
 	}
 
 	// Check the honeypot field value

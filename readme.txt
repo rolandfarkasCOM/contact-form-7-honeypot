@@ -3,7 +3,7 @@ Contributors: rolandfarkas
 Tags: contact form 7, honepot, bot, spam protection, spam
 Requires at least: 5.6
 Tested up to: 6.6
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 7.0
@@ -43,4 +43,6 @@ Simply deactivate and delete the plugin.
 = 1.0.4 =
 * Security fixes and tweaks
 = 1.0.5 =
+* Tweaks
+= 1.0.6 =
 * Tweaks
