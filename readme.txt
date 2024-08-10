@@ -3,16 +3,16 @@ Contributors: rolandfarkas
 Tags: contact form 7, honepot, bot, spam protection, spam
 Requires at least: 4.9
 Tested up to: 6.6
-Stable tag: 1.0.2
+Stable tag: 1.0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 5.6
  
-A WordPress plugin to add a honey pot for spam bots on every Contact Form 7 form.
+A WordPress plugin to block spam bots on every Contact Form 7 form.
  
 == Description ==
  
-Adds a hidden field with a random name to Contact Form 7 forms to block bot/spam submissions.
+A simple honeypot implementation for Contact Form 7 to prevent spam with a time tracker feature and hidden honeypot field for enhanced security.
 
 *Requires the Contact Form 7 plugin.
 
@@ -40,3 +40,5 @@ Simply deactivate and delete the plugin.
 * Added an additional time tracker feature
 = 1.0.3 =
 * Tweaks
+= 1.0.4 =
+* Security fixes and tweaks

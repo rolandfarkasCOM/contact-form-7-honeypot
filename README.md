@@ -6,7 +6,7 @@
 
 ### About ###
 
-A straightforward plugin that adds a randomly generated honeypot to every Contact Form 7 form on a WordPress site to prevent bot submissions.
+A simple honeypot implementation for Contact Form 7 to prevent spam with a time tracker feature and hidden honeypot field for enhanced security.
 
 ### Contributing ###
 
